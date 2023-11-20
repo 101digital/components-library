@@ -1,0 +1,17 @@
+{
+  "name": "components-library",
+  "version": "1.0.0",
+  "repository": "https://github.com/101digital/components-library",
+  "description": "Provide data for other component",
+  "main": "index.js",
+  "module": "index.js",
+  "files": [
+    "data/"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "tuyennguyen",
+  "license": "MIT"
+}
