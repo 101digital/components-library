@@ -4,15 +4,16 @@
 const HeaderImports = `
 import React, { useEffect } from 'react';
 import {View, Text, TouchableOpacity } from 'react-native';
-import { useWallet } from 'react-native-dashboard-component';
+import { useFinance } from 'financial-profile-component';
+import { useUser } from 'react-native-user-profile-component';
 import useMergeStyles from './styles';
 `;
 
 // State Details
 const StateDetails = `
   const styles = useMergeStyles();
-  const { walletDetails, fetchWalletDetails, paging } = useWallet();
-  const savingAccount = walletDetails?walletDetails.find((account) => account.bankAccount.accountSubType === 'SavingAccount-i'):null;
+  const { financialProfileDetails, fetchFinancialProfile } = useFinance();
+  const { userDetails } = useUser();
 `;
 
 // State Details
@@ -21,8 +22,10 @@ const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
 // Functions
 const Functions =(initialValuesCode,functionCode) => `
   useEffect(() => {
-    fetchWalletDetails(paging.pageNumber, paging.pageSize, 'DEPOSIT_WALLET');
-  }, []);
+    if (userDetails) {
+      fetchFinancialProfile(userDetails.userId)
+    }
+  }, [userDetails]);
 `;
 
 // Fields Components
@@ -69,8 +72,8 @@ const ReturnStatement = (fields,enableTranslation) => {
         componentCode += `{/* ${field.type} - ${field.label} */}
         {<View>
             <Text style={styles.balance}>
-              {savingAccount ? savingAccount.currencyCode+' ': 'SGD '}
-              {savingAccount ? savingAccount.${fieldName}.toFixed(2) : '$0.00'}
+              {financialProfileDetails ? financialProfileDetails.currency+' ': 'SGD '}
+              {financialProfileDetails ? financialProfileDetails.${fieldName}.toFixed(2) : '$0.00'}
             </Text>
           </View>}`;
         break;
