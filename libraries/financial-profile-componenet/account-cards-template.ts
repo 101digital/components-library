@@ -541,7 +541,6 @@ export const ReturnStatement = (fields,enableTranslation) => {
         </Modal>
       </ScrollView>
     );
-  );
 `;
 
   return componentCode;

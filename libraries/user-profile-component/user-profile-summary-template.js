@@ -1,7 +1,7 @@
 // ReactNativeLibrary.js
 
 // Header Imports
-export const HeaderImports = `
+const HeaderImports = `
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { View, Text, Button, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Formik, ErrorMessage } from 'formik';
@@ -17,7 +17,7 @@ import {validationSchema as generateValidationSchema} from './model';
 `;
 
 // State Details
-export const StateDetails = `
+const StateDetails = `
 const { userDetails, updateUserProfile } = useUser();
 const [initialValues, setInitialValues] = useState({});
 const [successMessage, setSuccessMessage] = useState('');
@@ -34,10 +34,10 @@ const inputRefs = {};
 const styles = useMergeStyles();`;
 
 // State Details
-export const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
+const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
 
 // Functions
-export const Functions =(initialValuesCode,functionCode) => `
+const Functions =(initialValuesCode,functionCode) => `
 useEffect(() => {
   if (userDetails) {
     setInitialValues(${initialValuesCode});
@@ -196,7 +196,7 @@ const restructureObject=(input)=> {
 `;
 
 // Fields Components
-export const FieldsComponents =(detailsField) => `
+const FieldsComponents =(detailsField) => `
 // Your subtitle component code
 const SubtitleComponent = ({ label }) => (
   <View style={styles.userInfo}>
@@ -317,7 +317,7 @@ const LabelFieldComponent = ({ field, values, detailsField, enableTranslation })
 
 
 // Return Statement
-export const ReturnStatement = (fields,enableTranslation) => {
+const ReturnStatement = (fields,enableTranslation) => {
   const convertFieldName = (fieldName) => fieldName.replace(/[\[\]\.]/g, "_");
   let componentCode = `
     return (
@@ -355,6 +355,14 @@ export const ReturnStatement = (fields,enableTranslation) => {
     }
 
     switch (field.type) {
+      case 'title':
+        componentCode += `{/* ${field.type} - ${field.label} */}
+        <View
+          style={styles.userInfo}
+        >
+          <Text style={styles.title}>{values['${detailsField}']}</Text>
+        </View>`;
+        break;
       case 'subtitle':
         componentCode += `{/* ${field.type} - ${field.label} */}
         <View
@@ -468,7 +476,6 @@ export const ReturnStatement = (fields,enableTranslation) => {
         {!values['${detailsField}_hidden'] && <View
           style={styles.userInfo}
         >
-          <Text style={styles.subtitle}>${enableTranslation ? `i18n?.t('${convertI18nKey(componentName)}.lbl_${convertI18nKey(fieldName)}')` : `'${field.label}'`}</Text>
           <>
             <Text testID={'${field.type}-${fieldName}'} style={styles.fieldLabel}>
               {${enableTranslation ? `i18n?.t('${convertI18nKey(componentName)}.lbl_${convertI18nKey(fieldName)}')` : `'${field.label}'`}}:
@@ -483,66 +490,163 @@ export const ReturnStatement = (fields,enableTranslation) => {
   }
 
   componentCode += `
-                {/* Save Details button */}
-                <View style={styles.saveButtonContainer}>
-                  <Button title="Save Details" onPress={handleSubmit} />
-                </View>
               </>
             );
           }}
         </Formik>
-
-        {/* Modal for selecting options */}
-        <Modal
-          isVisible={isSelectorVisible}
-          onBackdropPress={() => {
-            toggleSelector();
-            setSelectedFieldTitle('');
-            setSelectedField('');
-            setSelectFieldData(null);
-          }} // Close the modal when clicking outside
-          backdropOpacity={0.5}
-          animationIn="slideInUp" // Specify the animation to open from the bottom
-          animationOut="slideOutDown" // Specify the animation to close towards the bottom
-          style={styles.selectorWrapper}
-          // style={[styles.selectorWrapper, { height: getMaxHeight() }]}
-        >
-          <View style={[styles.selectorContainer, { height: getMaxHeight() }]}>
-            {/* Add your action sheet content here */}
-            <Text style={styles.selectorTitle}>{selectedFieldTitle}</Text>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              {selectFieldData ? (
-                selectFieldData.map((item, index) => (
-                  <TouchableOpacity
-                    key={index}
-                    onPress={() => {
-                      handleOptionSelect(selectedField, item.value);
-                    }} // Open the action sheet modal
-                    activeOpacity={0.7}
-                    // style={styles.inputIconWrapper}
-                  >
-                    {formikRef.current.getFieldProps(selectedField).value === item.value ? (
-                      <View style={styles.selectedItem}>
-                        <Text>{item.value}</Text>
-                        <TickIcon />
-                      </View>
-                    ) : (
-                      <View style={styles.selectorItem}>
-                        <Text>{item.value}</Text>
-                      </View>
-                    )}
-                  </TouchableOpacity>
-                ))
-              ) : (
-                <Text>Loading data...</Text>
-              )}
-            </ScrollView>
-          </View>
-        </Modal>
       </ScrollView>
     );
-  );
 `;
 
   return componentCode;
 };
+
+const Styles = `
+  import { defaultsDeep } from 'lodash';
+  import { useContext } from 'react';
+  import { StyleSheet } from 'react-native';
+  import { ThemeContext } from 'react-native-theme-component';
+
+  const useMergeStyles = (style?: SelectGenderModalStyles): SelectGenderModalStyles => {
+    const theme = useContext(ThemeContext);
+
+    const defaultStyles: SelectGenderModalStyles = StyleSheet.create({
+      container: {
+        flex: 1,
+        backgroundColor: theme.colors.LightGrayBackground, // Access theme colors
+        padding: 8,
+        paddingTop: 33,
+      },
+      userInfo: {
+        marginTop: 16,
+        width: '100%',
+        paddingHorizontal: 8,
+      },
+      title:{
+        fontSize: 24,
+        marginTop: 8,
+        color: theme.colors.black,
+      },
+      subtitle:{
+        fontSize: 16,
+        fontStyle: 'normal',
+        fontWeight: '600',
+        lineHeight: 20,
+        color:theme.colors.Black
+      },
+      fieldLabel: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 2,
+      },
+      input: {
+        fontSize: 16,
+        marginBottom: 16,
+        backgroundColor: 'white',
+        width: '90%',
+      },
+      activeInput: {
+        borderColor: theme.colors.Black1B, // Use theme colors
+        borderWidth: 1,
+      },
+      inputIconWrapper: {
+        alignSelf: 'center',
+      },
+      inputWrapper: {
+        flex: 1,
+        paddingHorizontal: 8,
+        flexDirection: 'row',
+      },
+      inputContent: {
+        flex: 1,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        borderRadius: 12,
+        height: 55,
+        overflow: 'hidden',
+      },
+      errorText: {
+        color: theme.colors.Red, // Use theme colors
+      },
+      errorInput: {
+        borderColor: theme.colors.Red,
+      },
+      errorWrapper: {
+        flex: 1,
+        paddingHorizontal: 8,
+        flexDirection: 'row',
+      },
+      saveButtonContainer: {
+        marginTop: 20,
+        alignSelf: 'center',
+      },
+      successMessage: {
+        color: theme.colors.GreenSuccess, // Use theme colors
+        textAlign: 'center',
+        marginBottom: 10,
+      },
+      errorMessage: {
+        color: theme.colors.Red, // Use theme colors
+        textAlign: 'center',
+        marginBottom: 10,
+      },
+      selectorWrapper:{
+        margin: 0,
+        justifyContent: 'flex-end'
+      },
+      selectorContainer: {
+        backgroundColor: theme.colors.white,
+        borderTopLeftRadius: 32,
+        borderTopRightRadius: 32,
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        paddingHorizontal: 16,
+        paddingTop: 16,
+        paddingBottom: 16,
+      },
+      selectorTitle : {
+        textAlign:'center',
+        fontSize: 24,
+        fontStyle: 'normal',
+        fontWeight: '600',
+        lineHeight: 32,
+        letterSpacing: -0.12,
+        color:theme.colors.Black1B,
+      },
+      selectorItem :{
+        paddingHorizontal: 8,
+        paddingVertical: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderRadius: 12,
+        alignItems: 'center',
+      },
+      selectedItem :{
+        paddingHorizontal: 8,
+        paddingVertical: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderRadius: 12,
+        alignItems: 'center',
+        backgroundColor: theme.colors.LightGrayBorder
+      }
+    });
+
+    return defaultsDeep(defaultStyles);
+  };
+
+  export default useMergeStyles;
+`.trim();
+
+const userProfileSummaryFunctions = {
+  HeaderImports,
+  StateDetails,
+  ContextStateDetails,
+  Functions,
+  ReturnStatement,
+  Styles
+};
+
+module.exports = userProfileSummaryFunctions;
