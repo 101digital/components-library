@@ -1,0 +1,18 @@
+{
+  "version":"1.0.0"
+  "components": {
+    "User Profile Component":{
+      "id": "user-profile-component",
+      "templates": {
+        "User Profile Form Component":{
+          "version":"1.0.0",
+          "name":"user-profile-form-component"
+        },
+        "User Profile Summary Component":{
+          "version":"1.0.0",
+          "name":"user-profile-summary-component"
+        }
+      }
+    }
+  }
+}
