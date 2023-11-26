@@ -4,7 +4,7 @@
 const HeaderImports = `
 import React, { useEffect } from 'react';
 import {View, Text, TouchableOpacity } from 'react-native';
-import { useFinance } from 'financial-profile-component';
+import { useFinance } from 'react-native-financial-profile-component';
 import { useUser } from 'react-native-user-profile-component';
 import useMergeStyles from './styles';
 `;
@@ -20,7 +20,7 @@ const StateDetails = `
 const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
 
 // Functions
-const Functions =(initialValuesCode,functionCode) => `
+const Functions = (initialValuesCode, functionCode) => `
   useEffect(() => {
     if (userDetails) {
       fetchFinancialProfile(userDetails.userId)
@@ -29,7 +29,7 @@ const Functions =(initialValuesCode,functionCode) => `
 `;
 
 // Fields Components
-const FieldsComponents =(detailsField) => `
+const FieldsComponents = (detailsField) => `
 // Your subtitle component code
 const SubtitleComponent = ({ label }) => (
   <View style={styles.userInfo}>
@@ -38,9 +38,8 @@ const SubtitleComponent = ({ label }) => (
 );
 `;
 
-
 // Return Statement
-const ReturnStatement = (fields,enableTranslation) => {
+const ReturnStatement = (fields, enableTranslation) => {
   const convertFieldName = (fieldName) => fieldName.replace(/[\[\]\.]/g, "_");
   let componentCode = `
     return (
@@ -60,7 +59,7 @@ const ReturnStatement = (fields,enableTranslation) => {
     const field = fields[fieldName];
 
     switch (field.type) {
-      case 'cardTitle':
+      case "cardTitle":
         componentCode += `{/* ${field.type} - ${field.label} */}
         <View
           testID={'${field.type}-${fieldName}'}
@@ -68,7 +67,7 @@ const ReturnStatement = (fields,enableTranslation) => {
           <Text style={styles.title}>${field.label}</Text>
         </View>`;
         break;
-      case 'currencyField':
+      case "currencyField":
         componentCode += `{/* ${field.type} - ${field.label} */}
         {<View>
             <Text style={styles.balance}>
@@ -141,14 +140,13 @@ const Styles = `
   export default useMergeStyles;
 `.trim();
 
-
 const financialProfileSummaryFunctions = {
   HeaderImports,
   StateDetails,
   ContextStateDetails,
   Functions,
   ReturnStatement,
-  Styles
+  Styles,
 };
 
 module.exports = financialProfileSummaryFunctions;

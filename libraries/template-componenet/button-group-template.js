@@ -4,7 +4,7 @@
 const HeaderImports = `
 import React, { useEffect } from 'react';
 import {View, Text, TouchableOpacity } from 'react-native';
-import { useFinance } from 'financial-profile-component';
+import { useFinance } from 'react-native-financial-profile-component';
 import { useUser } from 'react-native-user-profile-component';
 import useMergeStyles from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -19,10 +19,10 @@ const StateDetails = `
 const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
 
 // Functions
-const Functions =(initialValuesCode,functionCode) => ``;
+const Functions = (initialValuesCode, functionCode) => ``;
 
 // Fields Components
-const FieldsComponents =(detailsField) => `
+const FieldsComponents = (detailsField) => `
 // Your subtitle component code
 const SubtitleComponent = ({ label }) => (
   <View style={styles.userInfo}>
@@ -31,9 +31,8 @@ const SubtitleComponent = ({ label }) => (
 );
 `;
 
-
 // Return Statement
-const ReturnStatement = (fields,enableTranslation) => {
+const ReturnStatement = (fields, enableTranslation) => {
   const convertFieldName = (fieldName) => fieldName.replace(/[\[\]\.]/g, "_");
   let componentCode = `
     return (
@@ -45,12 +44,16 @@ const ReturnStatement = (fields,enableTranslation) => {
     const field = fields[fieldName];
 
     switch (field.type) {
-      case 'buttonField':
+      case "buttonField":
         componentCode += `{/* ${field.type} - ${field.label} */}
         <TouchableOpacity
           testID={'${field.type}-${fieldName}'}
           style={styles.actionButton}>
-            ${field.iconName ? `<Icon name="${field.iconName}" size={32} color="white" />` : ''}
+            ${
+              field.iconName
+                ? `<Icon name="${field.iconName}" size={32} color="white" />`
+                : ""
+            }
             <Text style={styles.actionText}>${fieldName}</Text>
         </TouchableOpacity>
         `;
@@ -121,7 +124,7 @@ const buttonGroupFunctions = {
   ContextStateDetails,
   Functions,
   ReturnStatement,
-  Styles
+  Styles,
 };
 
 module.exports = buttonGroupFunctions;
