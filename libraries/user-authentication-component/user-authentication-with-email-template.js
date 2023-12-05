@@ -2,15 +2,19 @@
 
 // Header Imports
 const HeaderImports = `
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text } from 'react-native';
-import {  TextInput as PaperTextInput } from 'react-native-paper';
+import { Checkbox, TextInput as PaperTextInput } from 'react-native-paper';
 import { Formik, Field, FormikProps } from 'formik';
 import { useAuth } from 'react-native-auth-component';
 import {validationSchema} from './model';
 import { colors as defaultColors } from '@/assets/Colors';
 import useMergeStyles from './styles';
-import {Button} from 'react-native-theme-component';
+import {Button, ThemeContext} from 'react-native-theme-component';
+import {
+  changeLanguage,
+  convertToLanguageCode,
+} from '@/translations/translation-config';
 
 type LoginComponentProps = {
   loginSuccess: () => void;
@@ -24,6 +28,9 @@ const StateDetails = `
 const { login } = useAuth();
 const [loginError, setLoginError] = useState<string | null>(null);
 const styles = useMergeStyles();
+const {i18n} = useContext(ThemeContext);
+const [currentSelectedLanguage, setCurrentSelectedLanguage] =
+  useState<string>('english');
 
 const initialValues = {
     email: '',
@@ -34,7 +41,7 @@ const initialValues = {
 const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
 
 // Functions
-const Functions =(initialValuesCode,functionCode) => `
+const Functions = (initialValuesCode, functionCode) => `
 const onSubmit = async ({ email, password }: typeof initialValues) => {
     try {
       const response = await login(email, password);
@@ -48,10 +55,16 @@ const onSubmit = async ({ email, password }: typeof initialValues) => {
       setLoginError('An error occurred during login. Please try again.');
     }
   };
+
+
+const onChangeLanguage = (lang: string) => {
+  changeLanguage(convertToLanguageCode(lang));
+  setCurrentSelectedLanguage(lang);
+};
 `;
 
 // Fields Components
-const FieldsComponents =(detailsField) => `
+const FieldsComponents = (detailsField) => `
 // Your subtitle component code
 const SubtitleComponent = ({ label }) => (
   <View style={styles.userInfo}>
@@ -77,7 +90,13 @@ const TextFieldComponent = ({ field, values, initialValues, activeInput, handleC
               ? styles.errorInput
               : null,
           ]}
-          label={${enableTranslation ? `i18n?.t('${convertI18nKey(componentName)}.txt_${convertI18nKey(field.name)}')` : `'${field.label}'`}}
+          label={${
+            enableTranslation
+              ? `i18n?.t('${convertI18nKey(componentName)}.txt_${convertI18nKey(
+                  field.name
+                )}')`
+              : `'${field.label}'`
+          }}
           name={'${detailsField}'}
           onChangeText={handleChange('${detailsField}')}
           value={values['${detailsField}']}
@@ -121,7 +140,13 @@ const SelectFieldComponent = ({ field, values, initialValues, activeInput, handl
               ? styles.errorInput
               : null,
           ]}
-          label={${enableTranslation ? `i18n?.t('${convertI18nKey(componentName)}.${convertI18nKey(field.name)}')` : `'${field.label}'`}}
+          label={${
+            enableTranslation
+              ? `i18n?.t('${convertI18nKey(componentName)}.${convertI18nKey(
+                  field.name
+                )}')`
+              : `'${field.label}'`
+          }}
           name={'${detailsField}'}
           value={values['${detailsField}']}
           onFocus={() => handleInputFocus('${detailsField}')}
@@ -135,7 +160,13 @@ const SelectFieldComponent = ({ field, values, initialValues, activeInput, handl
         />
         <TouchableOpacity
           onPress={() => {
-            setSelectedFieldTitle(${enableTranslation ? `i18n?.t('${convertI18nKey(componentName)}.${convertI18nKey(field.name)}')` : `'${field.label}'`})
+            setSelectedFieldTitle(${
+              enableTranslation
+                ? `i18n?.t('${convertI18nKey(componentName)}.${convertI18nKey(
+                    field.name
+                  )}')`
+                : `'${field.label}'`
+            })
             setSelectedField('${detailsField}')
             toggleSelector()
             // Fetch data when the selectField is clicked
@@ -162,7 +193,13 @@ const LabelFieldComponent = ({ field, values, detailsField, enableTranslation })
     <Text style={styles.subtitle}>{enableTranslation ? \`i18n?.t('\${convertI18nKey(componentName)}.lbl_\${convertI18nKey(field.name)}')\` : \`'\${field.label}'\`}</Text>
     <>
       <Text testID={'labelField-${field.name}'} style={styles.fieldLabel}>
-        {${enableTranslation ? `i18n?.t('${convertI18nKey(componentName)}.lbl_${convertI18nKey(field.name)}')` : `'${field.label}'`}}:
+        {${
+          enableTranslation
+            ? `i18n?.t('${convertI18nKey(componentName)}.lbl_${convertI18nKey(
+                field.name
+              )}')`
+            : `'${field.label}'`
+        }}:
       </Text>
       <Text style={styles.label}>{values['${detailsField}']}</Text>
     </>
@@ -170,13 +207,46 @@ const LabelFieldComponent = ({ field, values, detailsField, enableTranslation })
 );
 `;
 
-
 // Return Statement
-const ReturnStatement = (fields,enableTranslation) => {
+const ReturnStatement = (
+  fields,
+  enableTranslation,
+  componentName,
+  convertI18nKey,
+  supportLanguages
+) => {
   const convertFieldName = (fieldName) => fieldName.replace(/[\[\]\.]/g, "_");
+
   let componentCode = `return (
     <View style={styles.container}>
-      <Text style={styles.title}>{'Welcome to App studio'}</Text>
+
+    ${
+      supportLanguages?.length > 0
+        ? supportLanguages
+            .map(
+              (
+                l
+              ) => `<View style={{flexDirection: 'row', alignItems: 'center'}}>
+    <Text>${l}</Text>
+    <Checkbox
+      status={
+        currentSelectedLanguage === '${l}' ? 'checked' : 'unchecked'
+      }
+      onPress={() => onChangeLanguage('${l}')}
+    />
+    </View>`
+            )
+            .join("")
+        : ""
+    }
+
+      <Text style={styles.title}>{${
+        enableTranslation
+          ? `i18n?.t('login_with_email_component.lbl_title')`
+          : "Welcome to App studio"
+      }}</Text>
+      
+      
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -197,18 +267,24 @@ const ReturnStatement = (fields,enableTranslation) => {
       const fieldParts = fieldName.split(".");
       const index = fieldParts[0].match(/\d+/)[0]; // Extract the index from fieldName
 
-      const mainFieldName = fieldParts[0].replace(/\[\d+\]/, ''); // Convert nested field name
+      const mainFieldName = fieldParts[0].replace(/\[\d+\]/, ""); // Convert nested field name
       const subFieldName = fieldParts[1];
       detailsField = `${mainFieldName}_${index}_${subFieldName}`;
     }
 
     switch (field.type) {
-      case 'textField':
-          componentCode += `{/* ${field.type} - ${field.label} */}
+      case "textField":
+        componentCode += `{/* ${field.type} - ${field.label} */}
             <PaperTextInput
               testID="${detailsField}-input"
               style={styles.input}
-              label={'${field.label}'}
+              label={${
+                enableTranslation
+                  ? `i18n?.t('${convertI18nKey(
+                      componentName
+                    )}.lbl_${convertI18nKey(fieldName)}')`
+                  : `'${field.label}'`
+              }}
               secureTextEntry={${field.isSecure}}
               onChangeText={formikProps.handleChange('${detailsField}')}
               value={formikProps.values.${detailsField}}
@@ -223,12 +299,18 @@ const ReturnStatement = (fields,enableTranslation) => {
               </View>
             )}`;
         break;
-      case 'buttonField':
+      case "buttonField":
         componentCode += `{/* ${field.type} - ${field.label} */}
         <>
           <View style={{ width:'100%'}}>
             <Button
-              label={'${field.label}'}
+              label={${
+                enableTranslation
+                  ? `i18n?.t('${convertI18nKey(
+                      componentName
+                    )}.btn_${convertI18nKey(fieldName)}')`
+                  : `'${field.label}'`
+              }}
               onPress={formikProps.handleSubmit}
               variant= 'primary'
             />
@@ -348,7 +430,7 @@ const userProfileSummaryFunctions = {
   ContextStateDetails,
   Functions,
   ReturnStatement,
-  Styles
+  Styles,
 };
 
 module.exports = userProfileSummaryFunctions;
