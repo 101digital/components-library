@@ -4,7 +4,7 @@
 const HeaderImports = `
 import React, { useEffect } from 'react';
 import {View, Text, TouchableOpacity } from 'react-native';
-import { useFinance } from 'react-native-financial-profile-component';
+import { useFinance } from 'financial-profile-component';
 import { useUser } from 'react-native-user-profile-component';
 import useMergeStyles from './styles';
 `;
@@ -65,7 +65,8 @@ const ReturnStatement = (fields, enableTranslation) => {
           testID={'${field.type}-${fieldName}'}
         >
           <Text style={styles.title}>${field.label}</Text>
-        </View>`;
+        </View>
+        `;
         break;
       case "currencyField":
         componentCode += `{/* ${field.type} - ${field.label} */}
@@ -74,7 +75,10 @@ const ReturnStatement = (fields, enableTranslation) => {
               {financialProfileDetails ? financialProfileDetails.currency+' ': 'SGD '}
               {financialProfileDetails ? financialProfileDetails.${fieldName}.toFixed(2) : '$0.00'}
             </Text>
-          </View>}`;
+          </View>}
+          <TouchableOpacity style={styles.footerButton}>
+            <Text style={styles.footerButtonText}>View history</Text>
+          </TouchableOpacity>`;
         break;
       default:
         break;
@@ -100,23 +104,20 @@ const Styles = `
       const defaultStyles: SelectGenderModalStyles = StyleSheet.create({
         container: {
           flex: 1,
-          backgroundColor: theme.colors.White,
+          backgroundColor: theme.colors.White
         },
         cardWrapper: {
           paddingTop: 15,
-          paddingHorizontal:15
+          // paddingHorizontal:15
         },
         card: {
           backgroundColor: theme.colors.primaryColor,
           borderRadius: 12,
           padding: 16,
-          minHeight: 100,
-          marginBottom: 10,
+          // minHeight: 100,
+          // marginBottom: 10,
         },
-        activeCard: {
-          borderColor: theme.colors.white,
-          borderWidth: 1,
-        },
+        activeCard: {},
         title: {
           fontSize: 18,
           fontWeight: 'bold',
@@ -131,6 +132,22 @@ const Styles = `
           fontSize: 16,
           marginTop: 8,
           color: theme.colors.OffWhite,
+        },
+        footerButton: {
+          flex: 1,
+          borderRadius: 12,
+          // alignItems: 'center',
+          backgroundColor: theme.colors.primaryColor,
+          // paddingTop:5,
+          paddingTop:25,
+          // marginHorizontal:4
+        },
+        footerButtonText: {
+          fontSize: 15,
+          fontWeight:'600',
+          lineHeight:20,
+          marginTop: 8,
+          color: theme.colors.white,
         }
       });
 

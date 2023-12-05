@@ -1,0 +1,14 @@
+{
+  "version":"1.0.0"
+  "components": {
+    "Loyalty Profile Component":{
+      "id": "loyalty-profile-component",
+      "templates": {
+        "Loyalty Profile Form Component":{
+          "version":"1.0.0",
+          "name":"loyalty-profile-card-template"
+        }
+      }
+    }
+  }
+}

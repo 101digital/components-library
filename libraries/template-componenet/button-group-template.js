@@ -4,7 +4,7 @@
 const HeaderImports = `
 import React, { useEffect } from 'react';
 import {View, Text, TouchableOpacity } from 'react-native';
-import { useFinance } from 'react-native-financial-profile-component';
+import { useFinance } from 'financial-profile-component';
 import { useUser } from 'react-native-user-profile-component';
 import useMergeStyles from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
