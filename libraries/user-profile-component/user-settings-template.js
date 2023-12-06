@@ -55,6 +55,7 @@ const ReturnStatement = (fields,enableTranslation) => {
 
   for (const fieldName in fields) {
     const field = fields[fieldName];
+    const testId = `${field?.type}-${fieldName}`;
 
     let pattern = /\[\d+\]\./; // Regular expression to match "[X]."
     let containsPattern = pattern.test(fieldName);
@@ -73,19 +74,19 @@ const ReturnStatement = (fields,enableTranslation) => {
       case 'title':
         componentCode += `{/* ${field.type} - ${field.label} */}
         <>
-          <Text style={styles.profileName}>{profile.${fieldName} ? profile?.${fieldName} : profile?.nickName}</Text>
+          <Text testID={'${testId}'} style={styles.profileName}>{profile.${fieldName} ? profile?.${fieldName} : profile?.nickName}</Text>
         </>`;
         break;
       case 'subtitle':
         componentCode += `{/* ${field.type} - ${field.label} */}
         <>
-          <Text style={styles.userName}>{profile ? profile.${fieldName}:''}</Text>
+          <Text testID={'${testId}'} style={styles.userName}>{profile ? profile.${fieldName}:''}</Text>
         </>`;
         break;
       case 'label':
         componentCode += `{/* ${field.type} - ${field.label} */}
         <>
-          <Text style={styles.membershipIdLabel}>{"${field.label}"}</Text>
+          <Text testID={'${testId}'} style={styles.membershipIdLabel}>{"${field.label}"}</Text>
         </>`;
         break;
       default:
@@ -104,6 +105,7 @@ const ReturnStatement = (fields,enableTranslation) => {
 
       for (const fieldName in fields) {
         const field = fields[fieldName];
+        const testId = `${field?.type}-${fieldName}`;
 
         let pattern = /\[\d+\]\./; // Regular expression to match "[X]."
         let containsPattern = pattern.test(fieldName);
@@ -121,7 +123,7 @@ const ReturnStatement = (fields,enableTranslation) => {
         switch (field.type) {
           case 'buttonItem':
             componentCode += `{/* ${field.type} - ${field.label} */}
-              <TouchableOpacity style={[styles.buttonContainer]} >
+              <TouchableOpacity testID={testId} style={[styles.buttonContainer]} >
                 <View style={styles.itemWrapper}>
                   <View style={styles.itemContainer}>
                     <Icon name="${field.iconName}" size={16} color="theme.colors.primaryIconColor" />
