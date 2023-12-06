@@ -246,7 +246,7 @@ const ReturnStatement = (
       case "textField":
         componentCode += `{/* ${field.type} - ${field.label} */}
             <PaperTextInput
-              testID="${detailsField}-input"
+              testID="${testId}"
               style={styles.input}
               label={${
                 enableTranslation
