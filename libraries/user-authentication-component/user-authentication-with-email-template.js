@@ -11,10 +11,6 @@ import {validationSchema} from './model';
 import { colors as defaultColors } from '@/assets/Colors';
 import useMergeStyles from './styles';
 import {Button, ThemeContext} from 'react-native-theme-component';
-import {
-  changeLanguage,
-  convertToLanguageCode,
-} from '@/translations/translation-config';
 
 type LoginComponentProps = {
   loginSuccess: () => void;
@@ -29,8 +25,6 @@ const { login } = useAuth();
 const [loginError, setLoginError] = useState<string | null>(null);
 const styles = useMergeStyles();
 const {i18n} = useContext(ThemeContext);
-const [currentSelectedLanguage, setCurrentSelectedLanguage] =
-  useState<string>('english');
 
 const initialValues = {
     email: '',
@@ -56,11 +50,6 @@ const onSubmit = async ({ email, password }: typeof initialValues) => {
     }
   };
 
-
-const onChangeLanguage = (lang: string) => {
-  changeLanguage(convertToLanguageCode(lang));
-  setCurrentSelectedLanguage(lang);
-};
 `;
 
 // Fields Components
@@ -219,26 +208,6 @@ const ReturnStatement = (
 
   let componentCode = `return (
     <View style={styles.container}>
-
-    ${
-      supportLanguages?.length > 0
-        ? supportLanguages
-            .map(
-              (
-                l
-              ) => `<View style={{flexDirection: 'row', alignItems: 'center'}}>
-    <Text>${l}</Text>
-    <Checkbox
-      status={
-        currentSelectedLanguage === '${l}' ? 'checked' : 'unchecked'
-      }
-      onPress={() => onChangeLanguage('${l}')}
-    />
-    </View>`
-            )
-            .join("")
-        : ""
-    }
 
       <Text style={styles.title}>{"${
         enableTranslation
