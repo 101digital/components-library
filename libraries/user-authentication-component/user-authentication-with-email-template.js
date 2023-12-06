@@ -258,6 +258,7 @@ const ReturnStatement = (
 
   for (const fieldName in fields) {
     const field = fields[fieldName];
+    const testId = `${field?.type}-${fieldName}`;
 
     let pattern = /\[\d+\]\./; // Regular expression to match "[X]."
     let containsPattern = pattern.test(fieldName);
@@ -304,6 +305,7 @@ const ReturnStatement = (
         <>
           <View style={{ width:'100%'}}>
             <Button
+              testID="${testId}"
               label={${
                 enableTranslation
                   ? `i18n?.t('${convertI18nKey(

@@ -1,6 +1,6 @@
 {
   "name": "component-library",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "repository": "https://github.com/101digital/components-library",
   "description": "Provide data for other component",
   "main": "index.js",
