@@ -123,7 +123,7 @@ const ReturnStatement = (fields,enableTranslation) => {
         switch (field.type) {
           case 'buttonItem':
             componentCode += `{/* ${field.type} - ${field.label} */}
-              <TouchableOpacity testID={testId} style={[styles.buttonContainer]} >
+              <TouchableOpacity testID={'${testId}'} style={[styles.buttonContainer]} >
                 <View style={styles.itemWrapper}>
                   <View style={styles.itemContainer}>
                     <Icon name="${field.iconName}" size={16} color="theme.colors.primaryIconColor" />
