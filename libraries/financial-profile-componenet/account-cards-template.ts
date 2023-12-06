@@ -355,7 +355,6 @@ export const ReturnStatement = (fields,enableTranslation) => {
     }
 
     switch (field.type) {
-      case 'title':
       case 'subtitle':
         componentCode += `{/* ${field.type} - ${field.label} */}
         <View
