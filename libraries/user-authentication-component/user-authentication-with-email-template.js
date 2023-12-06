@@ -240,11 +240,11 @@ const ReturnStatement = (
         : ""
     }
 
-      <Text style={styles.title}>{${
+      <Text style={styles.title}>{"${
         enableTranslation
           ? `i18n?.t('login_with_email_component.lbl_title')`
           : "Welcome to App studio"
-      }}</Text>
+      }"}</Text>
       
       
       <Formik
