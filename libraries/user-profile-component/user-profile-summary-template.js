@@ -340,6 +340,7 @@ const ReturnStatement = (fields,enableTranslation) => {
 
   for (const fieldName in fields) {
     const field = fields[fieldName];
+    const testId = `${field?.type}-${fieldName}`;
 
     let pattern = /\[\d+\]\./; // Regular expression to match "[X]."
     let containsPattern = pattern.test(fieldName);
@@ -360,13 +361,13 @@ const ReturnStatement = (fields,enableTranslation) => {
         <View
           style={styles.userInfo}
         >
-          <Text style={styles.title}>{values['${detailsField}']}</Text>
+          <Text testID={'${testId}'} style={styles.title}>{values['${detailsField}']}</Text>
         </View>`;
         break;
       case 'subtitle':
         componentCode += `{/* ${field.type} - ${field.label} */}
         <View
-          testID={'${field.type}-${fieldName}'}
+          testID={'${testId}'}
           style={styles.userInfo}
         >
           <Text style={styles.subtitle}>${field.label}</Text>
@@ -385,7 +386,7 @@ const ReturnStatement = (fields,enableTranslation) => {
               ]}
             >
               <TextInput
-                testID={'${field.type}-${fieldName}'}
+                testID={'${testId}'}
                 style={[
                   styles.input,
                   values['${detailsField}'] !== initialValues['${detailsField}']
@@ -430,7 +431,7 @@ const ReturnStatement = (fields,enableTranslation) => {
               ]}
             >
               <TextInput
-                testID={'${field.type}-${fieldName}'}
+                testID={'${testId}'}
                 style={[
                   styles.input,
                   values['${detailsField}'] !== initialValues['${detailsField}']
@@ -477,7 +478,7 @@ const ReturnStatement = (fields,enableTranslation) => {
           style={styles.userInfo}
         >
           <>
-            <Text testID={'${field.type}-${fieldName}'} style={styles.fieldLabel}>
+            <Text testID={'${testId}'} style={styles.fieldLabel}>
               {${enableTranslation ? `i18n?.t('${convertI18nKey(componentName)}.lbl_${convertI18nKey(fieldName)}')` : `'${field.label}'`}}:
             </Text>
             <Text style={styles.label}>{values['${detailsField}']}</Text>
