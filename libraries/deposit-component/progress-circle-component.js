@@ -112,8 +112,8 @@ export const ProgressCircle: React.FC<ProgressCircleProps> = ({
 
   return (
     <View style={styles.container}>
-      <Svg width={diameter} height={diameter} viewBox={\`0 0 ${viewBox * 2} ${viewBox * 2}\`}>
-        <G rotation={'-90'} origin={\`${viewBox}, ${viewBox}\`}>
+      <Svg width={diameter} height={diameter} viewBox={\`0 0 \${viewBox * 2} \${viewBox * 2}\`}>
+        <G rotation={'-90'} origin={\`\${viewBox}, \${viewBox}\`}>
           <Circle
             cx="50%"
             cy="50%"
