@@ -3,6 +3,7 @@ const HeaderImports = `
 import React from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import Svg, { G, Circle } from 'react-native-svg';
+import useMergeStyles from './styles';
 `;
 
 // State Details

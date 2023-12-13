@@ -7,6 +7,7 @@ import {fonts} from '@/assets/fonts';
 import {colors} from '@/assets/Colors';
 import {useConditions} from 'react-native-branch-component';
 import {ProgressCircle} from "@/components/savingwalletdetail/progress-circle/progress-circle";
+import useMergeStyles from './styles';
 `;
 
 // State Details
