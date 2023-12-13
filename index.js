@@ -24,7 +24,7 @@ exports.getDataByComponentId = id => {
       return loginWithEmailTemplateFunctions;
     case "settings-with-user-details-template":
       return settingsWithUserDetailsFunctions;
-    case "progress-cicle-template":
+    case "progress-circle-template":
       return progressCirlcleFunctions;
     default:
       break;
