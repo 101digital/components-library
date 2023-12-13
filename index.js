@@ -6,6 +6,7 @@ const financialProfileSummaryFunctions = require('./libraries/financial-profile-
 const buttonGroupFunctions = require('./libraries/template-componenet/button-group-template.js');
 const loyaltyProfileCardFunctions = require('./libraries/loyalty-profile-componenet/loyalty-profile-card-template.js');
 const settingsWithUserDetailsFunctions = require('./libraries/user-profile-component/user-settings-template.js');
+const progressCirlcleFunctions = require('./libraries/deposit-component/progress-circle-component');
 
 exports.getDataByComponentId = id => {
   switch (id) {
@@ -23,6 +24,8 @@ exports.getDataByComponentId = id => {
       return loginWithEmailTemplateFunctions;
     case "settings-with-user-details-template":
       return settingsWithUserDetailsFunctions;
+    case "progress-cicle-template":
+      return progressCirlcleFunctions;
     default:
       break;
   }
