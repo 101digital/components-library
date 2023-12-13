@@ -11,10 +11,10 @@ const StateDetails = `
 `;
 
 // State Details
-// const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
+const ContextStateDetails = ``;
 
 // Functions
-// const Functions = (initialValuesCode, functionCode) => ``;
+const Functions = (initialValuesCode, functionCode) => ``;
 //
 // // Fields Components
 // const FieldsComponents = (detailsField) => `
@@ -176,8 +176,8 @@ const Styles = `
 const progressCirlcleFunctions = {
     HeaderImports,
     StateDetails,
-    // ContextStateDetails,
-    // Functions,
+    ContextStateDetails,
+    Functions,
     ReturnStatement,
     Styles,
 };
