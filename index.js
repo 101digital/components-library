@@ -7,6 +7,7 @@ const buttonGroupFunctions = require('./libraries/template-componenet/button-gro
 const loyaltyProfileCardFunctions = require('./libraries/loyalty-profile-componenet/loyalty-profile-card-template.js');
 const settingsWithUserDetailsFunctions = require('./libraries/user-profile-component/user-settings-template.js');
 const progressCirlcleFunctions = require('./libraries/deposit-component/progress-circle-component');
+const accountAddFundsFunctions = require('./libraries/financial-profile-componenet/account-add-funds-template');
 
 exports.getDataByComponentId = id => {
   switch (id) {
@@ -26,6 +27,9 @@ exports.getDataByComponentId = id => {
       return settingsWithUserDetailsFunctions;
     case "progress-circle-template":
       return progressCirlcleFunctions;
+    case "account-add-funds-template":
+      return accountAddFundsFunctions
+
     default:
       break;
   }
