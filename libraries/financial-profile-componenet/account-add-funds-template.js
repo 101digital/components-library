@@ -122,7 +122,7 @@ const ReturnStatement = (fields, enableTranslation) => {
                             <>
                                 {/* textField - Email */}
                                 <PaperTextInput
-                                    testID="amount-input"
+                                    testID={'${testId}'}
                                     style={styles.input}
                                     label={'Amount'}
                                     secureTextEntry={false}
@@ -157,6 +157,7 @@ const ReturnStatement = (fields, enableTranslation) => {
                         label={'Continue'}
                         onPress={handleSubmit}
                         variant="primary"
+                        testID={'${testId}'}
                     />
                 </View>
                  `;
@@ -164,7 +165,8 @@ const ReturnStatement = (fields, enableTranslation) => {
 
             case "availableBalance":
                 componentCode += `{/* ${field.type} - ${field.label} */}
-                 <View style={styles.availableBalanceContainer}>
+                 <View testID={'${testId}'}
+                       style={styles.availableBalanceContainer}>
                     <View>
                         <Text style={styles.availableBalanceText}>Transfer from</Text>
                         <Text style={styles.availableBalanceText}>•••• •••• •••• 8000</Text>
