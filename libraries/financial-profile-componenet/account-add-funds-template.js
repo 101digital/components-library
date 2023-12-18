@@ -135,9 +135,7 @@ const ReturnStatement = (fields, enableTranslation) => {
                                 />
 
                                 {formikProps.errors.amount && (
-                                    <View style={{width: '100%', marginTop: -15}}>
-                                        <Text style={styles.errorText}>{formikProps.errors.amount}</Text>
-                                    </View>
+                                    <Text style={styles.errorText}>{formikProps.errors.amount}</Text>
                                 )}
                             </>
                         )
@@ -164,6 +162,22 @@ const ReturnStatement = (fields, enableTranslation) => {
                  `;
                 break;
 
+            case "availableBalance":
+                componentCode += `{/* ${field.type} - ${field.label} */}
+                 <View style={styles.availableBalanceContainer}>
+                    <View>
+                        <Text style={styles.availableBalanceText}>Transfer from</Text>
+                        <Text style={styles.availableBalanceText}>•••• •••• •••• 8000</Text>
+                    </View>
+
+                    <View>
+                        <Text style={styles.availableBalanceText}>Available balance</Text>
+                        <Text style={styles.availableBalanceText}>RM 6,352.60</Text>
+                    </View>
+                </View>
+                 `;
+                break;
+
             default:
                 break;
         }
@@ -176,7 +190,7 @@ const ReturnStatement = (fields, enableTranslation) => {
 };
 
 const Styles = `
- import {defaultsDeep} from 'lodash';
+import {defaultsDeep} from 'lodash';
 import {useContext} from 'react';
 import {StyleSheet} from 'react-native';
 import {ThemeContext} from 'react-native-theme-component';
@@ -228,6 +242,18 @@ const useMergeStyles = (
         },
         amountOptionText:{
             color:colors.PinkPrimaryBlackColor
+        },
+        availableBalanceContainer:{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            borderRadius: 10,
+            backgroundColor: colors.DarkBlue,
+            paddingHorizontal:20,
+            paddingVertical:15
+        },
+        availableBalanceText:{
+            color: colors.White,
+            fontFamily: fonts.Regular
         }
     });
 
@@ -235,7 +261,6 @@ const useMergeStyles = (
 };
 
 export default useMergeStyles;
-
 `.trim();
 
 const accountAddFundsFunctions = {
