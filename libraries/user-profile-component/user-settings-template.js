@@ -28,7 +28,8 @@ const {userDetails, updateUserProfile} = useUser();
 const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
 
 // Functions
-const Functions =(initialValuesCode,functionCode) => `
+const Functions =(initialValuesCode,functionCode) => {
+  const eventFunctions =`
 useEffect(() => {
   if (userDetails) {
     setProfile(userDetails);
@@ -36,6 +37,8 @@ useEffect(() => {
 }, [userDetails]);
 
 `;
+return { eventFunctions };
+};
 
 // Fields Components
 const FieldsComponents =(detailsField) => ``;

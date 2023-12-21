@@ -20,14 +20,16 @@ const StateDetails = `
 const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
 
 // Functions
-const Functions = (initialValuesCode, functionCode) => `
+const Functions = (initialValuesCode, functionCode) => {
+  const eventFunctions =`
   useEffect(() => {
     if (userDetails) {
       fetchFinancialProfile(userDetails.userId)
     }
   }, [userDetails]);
 `;
-
+return { eventFunctions };
+};
 // Fields Components
 const FieldsComponents = (detailsField) => `
 // Your subtitle component code

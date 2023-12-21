@@ -37,7 +37,8 @@ const styles = useMergeStyles();`;
 const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
 
 // Functions
-const Functions =(initialValuesCode,functionCode) => `
+const Functions = (initialValuesCode, functionCode) => {
+  const eventFunctions =`
 useEffect(() => {
   if (userDetails) {
     setInitialValues(${initialValuesCode});
@@ -194,6 +195,8 @@ const restructureObject=(input)=> {
   return output;
 }
 `;
+return { eventFunctions };
+};
 
 // Fields Components
 const FieldsComponents =(detailsField) => `

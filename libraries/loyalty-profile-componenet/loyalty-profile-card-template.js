@@ -29,7 +29,8 @@ const StateDetails = `
 const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
 
 // Functions
-const Functions = (initialValuesCode, functionCode) => `
+const Functions = (initialValuesCode, functionCode) => {
+  const eventFunctions =`
   useEffect(() => {
     fetchLoyaltyProfile()
   },[]);
@@ -45,7 +46,8 @@ const Functions = (initialValuesCode, functionCode) => `
     []
   );
 `;
-
+return { eventFunctions };
+};
 // Fields Components
 const FieldsComponents = (detailsField) => `
 // Your subtitle component code
