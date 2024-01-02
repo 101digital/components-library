@@ -89,7 +89,7 @@ type ProgressCircleProps = {
 
 const screenWidth = Dimensions.get('window').width;
 
-export const ProgressCircle: React.FC<ProgressCircleProps> = ({
+const ProgressCircle: React.FC<ProgressCircleProps> = ({
   progress = 0,
   color,
   diameter = screenWidth / 2,

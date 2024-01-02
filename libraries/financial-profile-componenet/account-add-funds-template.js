@@ -90,8 +90,11 @@ const ReturnStatement = (fields, enableTranslation) => {
     let
         componentCode = `
     return (
-      <View style={styles.container}>       
+      <View style={styles.container}>    
+      <View>   
   `;
+
+    let bottomButton = ``
 
     for (const fieldName in fields) {
         const field = fields[fieldName];
@@ -150,19 +153,6 @@ const ReturnStatement = (fields, enableTranslation) => {
                  `;
                 break;
 
-            case "button":
-                componentCode += `{/* ${field.type} - ${field.label} */}
-                 <View style={styles.buttonContainer}>
-                    <Button
-                        label={'Continue'}
-                        onPress={handleSubmit}
-                        variant="primary"
-                        testID={'${testId}'}
-                    />
-                </View>
-                 `;
-                break;
-
             case "availableBalance":
                 componentCode += `{/* ${field.type} - ${field.label} */}
                  <View testID={'${testId}'}
@@ -180,10 +170,28 @@ const ReturnStatement = (fields, enableTranslation) => {
                  `;
                 break;
 
+            case "button":
+                bottomButton += `{/* ${field.type} - ${field.label} */}
+                 <View style={styles.buttonContainer}>
+                    <Button
+                        label={'Continue'}
+                        onPress={handleSubmit}
+                        variant="primary"
+                        testID={'${testId}'}
+                    />
+                </View>
+                 `;
+                break;
+
             default:
                 break;
         }
     }
+
+    componentCode += `
+    </View>);`;
+
+    componentCode += bottomButton
 
     componentCode += `
     </View>);`;
@@ -206,7 +214,8 @@ const useMergeStyles = (
     const defaultStyles = StyleSheet.create({
         container: {
             justifyContent: 'space-between',
-            flex: 1
+            flex: 1,
+            paddingHorizontal: 23
         },
         valueContainer: {
             flex: 1,
