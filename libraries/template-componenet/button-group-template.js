@@ -1,25 +1,111 @@
 // ReactNativeLibrary.js
 
 // Header Imports
-const HeaderImports = `
+let HeaderImports = `
 import React, { useEffect } from 'react';
 import {View, Text, TouchableOpacity } from 'react-native';
 import { useFinance } from 'financial-profile-component';
 import { useUser } from 'react-native-user-profile-component';
 import useMergeStyles from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/native';
+import {useConditions} from 'react-native-branch-component';
+import Route from '@/navigation/routes';
+
 `;
 
 // State Details
 const StateDetails = `
   const styles = useMergeStyles();
+  const navigation = useNavigation();
 `;
 
 // State Details
 const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
 
+
+const formatRouteKey = (key) => {
+  return key
+    .replace(/[A-Z]/g, (match, offset) => (offset > 0 ? "_" : "") + match)
+    .toUpperCase();
+};
+
 // Functions
-const Functions = (initialValuesCode, functionCode) => ``;
+const Functions = (initialValuesCode, functionCode, enterpriseDataSource, fields, paths) => {
+  let eventFunctions = '';
+  const branchConditionImports = []; // Declare and initialize outside the Functions function
+
+  const functionExists = (functionName) => {
+    return eventFunctions.includes(`const ${functionName} = (`);
+  };
+  
+
+  const generateBranchesCode = (data, key) => {
+    if (data[key]) {
+      eventFunctions += `if (await ${key}()) {`;
+      branchConditionImports.push(key);
+      if (data[key].action.true) {
+        const nextKey = data[key].action.true.branch || data[key].action.true.screen;
+        generateBranchesCode(data, nextKey);
+      }
+      eventFunctions += `} else {`;
+      if (data[key].action.false) {
+        const nextKey = data[key].action.false.branch || data[key].action.false.screen;
+        generateBranchesCode(data, nextKey);
+      } else {
+        console.log(`navigate("UnknownScreen");`);
+      }
+      eventFunctions += `}`;
+    } else {
+      eventFunctions += `navigation.navigate(Route.${formatRouteKey(key)});`;
+    }
+  };
+
+  for (const fieldName in fields) {
+    const field = fields[fieldName];
+    const eventKey = Object.keys(field).find((key) => key.startsWith('event'));
+    const eventName = eventKey ? eventKey : null;
+
+    if (eventName) {
+      let uniqueFunctionName = eventName;
+
+      // Check if the function already exists
+      let suffix = 1;
+      while (functionExists(uniqueFunctionName)) {
+        uniqueFunctionName = `${eventName}${suffix}`;
+        suffix += 1;
+      }
+
+      // If the function already exists, modify the existing function
+      if (suffix > 1) {
+        eventFunctions = eventFunctions.replace(
+          new RegExp(`const ${eventName} = \\(\\) => {`, 'g'),
+          `const ${eventName} = (type:any) => {`
+        );
+      } else {
+        // If the function does not exist, create a new one
+        eventFunctions += `
+  const ${uniqueFunctionName} = async (type:any) => {
+    `;
+        if (field[eventKey] && field[eventKey].screenName) {
+          eventFunctions += `navigation.navigate(type.screenName);`;
+        } else if (field[eventKey] && field[eventKey].branch) {
+          generateBranchesCode(paths, field[eventKey].branch); // Ensure paths is passed here
+        }
+
+        eventFunctions += `
+    console.log('${uniqueFunctionName} function called');
+  };
+  `;
+      }
+    }
+  }
+  return { eventFunctions, branchConditionImports };
+};
+
+
+
+
 
 // Fields Components
 const FieldsComponents = (detailsField) => `
@@ -45,10 +131,19 @@ const ReturnStatement = (fields, enableTranslation) => {
 
     switch (field.type) {
       case "buttonField":
+        const eventKey = Object.keys(field).find(key => key.startsWith('event'));
+        // const eventName = eventKey ? field[eventKey].screenName : null;
+        
+        const eventName = eventKey ? eventKey : null;
+
         componentCode += `{/* ${field.type} - ${field.label} */}
         <TouchableOpacity
           testID={'${field.type}-${fieldName}'}
-          style={styles.actionButton}>
+          style={styles.actionButton}
+          onPress={(e:any) => {
+            const eventData = ${eventName ? JSON.stringify(field[eventKey]) : 'null'};
+            ${eventName ? `${eventName}(eventData)` : ''}
+          }}>
             ${
               field.iconName
                 ? `<Icon name="${field.iconName}" size={32} color="white" />`

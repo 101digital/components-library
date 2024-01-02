@@ -35,7 +35,8 @@ const initialValues = {
 const ContextStateDetails = `const { i18n } = useContext(ThemeContext)`;
 
 // Functions
-const Functions = (initialValuesCode, functionCode) => `
+const Functions = (initialValuesCode, functionCode) => {
+ const eventFunctions = `
 const onSubmit = async ({ email, password }: typeof initialValues) => {
     try {
       const response = await login(email, password);
@@ -50,7 +51,9 @@ const onSubmit = async ({ email, password }: typeof initialValues) => {
     }
   };
 
-`;
+`
+return { eventFunctions };
+};
 
 // Fields Components
 const FieldsComponents = (detailsField) => `
